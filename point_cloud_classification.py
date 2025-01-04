@@ -12,3 +12,9 @@ from matplotlib import pyplot as plt
 
 keras.utils.set_random_seed(seed=42)
 
+DATA_DIR = keras.utils.get_file(
+    "modelnet.zip",
+    "http://3dvision.princeton.edu/projects/2014/3DShapeNets/ModelNet10.zip",
+    extract=True,
+)
+DATA_DIR = os.path.join(os.path.dirname(DATA_DIR), "ModelNet10")
