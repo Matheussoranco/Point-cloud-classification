@@ -18,3 +18,6 @@ DATA_DIR = keras.utils.get_file(
     extract=True,
 )
 DATA_DIR = os.path.join(os.path.dirname(DATA_DIR), "ModelNet10")
+
+mesh = trimesh.load(os.path.join(DATA_DIR, "chair/train/chair_0001.off"))
+mesh.show()
