@@ -67,3 +67,20 @@ BATCH_SIZE = 32
 train_points, test_points, train_labels, test_labels, CLASS_MAP = parse_dataset(
     NUM_POINTS
 )
+
+def augment(points, label):
+    points += keras.random.uniform(points.shape, -0.005, 0.005, dtype = "float64")
+    points = keras.random.shuffle(points)
+    return points, label
+
+
+train_size = 0.8
+dataset = tf_data.Dataset.from_tensor_slices((train_points, train_labels))
+test_dataset = tf_data.Dataset.from_tensor_slices((test_points, test_labels))
+train_dataset_size = int(len(dataset) * train_size)
+
+dataset = dataset.shuffle(len(train_points)).map(augment)
+test_dataset = test_dataset.shuffle(len(test_points)).batch(BATCH_SIZE)
+
+train_dataset = dataset.take(train_dataset_size).batch(BATCH_SIZE)
+validation_dataset = dataset.skip(train_dataset_size).batch(BATCH_SIZE)
