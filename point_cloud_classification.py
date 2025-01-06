@@ -21,3 +21,11 @@ DATA_DIR = os.path.join(os.path.dirname(DATA_DIR), "ModelNet10")
 
 mesh = trimesh.load(os.path.join(DATA_DIR, "chair/train/chair_0001.off"))
 mesh.show()
+
+points = mesh.sample(2048)
+
+fig = plt.figure(figsize=(5, 5))
+ax = fig.add_subplot(111, projection="3d")
+ax.scatter(points[:, 0], points[:, 1], points[:, 2])
+ax.set_axis_off()
+plt.show()
