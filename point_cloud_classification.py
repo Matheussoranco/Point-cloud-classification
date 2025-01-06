@@ -59,3 +59,11 @@ def parse_dataset(num_points=2048):
         np.array(test_labels),
         class_map,
     )
+
+NUM_POINTS = 2048
+NUM_CLASSES = 10
+BATCH_SIZE = 32
+
+train_points, test_points, train_labels, test_labels, CLASS_MAP = parse_dataset(
+    NUM_POINTS
+)
