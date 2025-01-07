@@ -126,3 +126,23 @@ def tnet(inputs, num_features):
     )(x)
     feat_T = layers.Reshape((num_features, num_features))(x)
     return layers.Dot(axes=(2, 1))([inputs, feat_T])
+
+inputs = keras.Input(shape=(NUM_POINTS, 3))
+
+x = tnet(inputs, 3)
+x = conv_bn(x, 32)
+x = conv_bn(x, 32)
+x = tnet(x, 32)
+x = conv_bn(x, 32)
+x = conv_bn(x, 64)
+x = conv_bn(x, 512)
+x = layers.GlobalMaxPooling1D()(x)
+x = dense_bn(x, 256)
+x = layers.Dropout(0.3)(x)
+x = dense_bn(x, 128)
+x = layers.Dropout(0.3)(x)
+
+outputs = layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = keras.Model(inputs=inputs, outputs=outputs, name="pointnet")
+model.summary()
