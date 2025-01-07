@@ -90,6 +90,18 @@ def conv_bn(x, filters):
     x = layers.BatchNormalization(momentum=0.0)(x)
     return layers.Activation("relu")(x)
 
+class OrthogonalRegularizer(keras.regularizers.Regularizer):
+    def __init__(self, num_features, l2reg=0.001):
+        self.num_features = num_features
+        self.l2reg = l2reg
+        self.eye = ops.eye(num_features)
+
+    def __call__(self, x):
+        x = ops.reshape(x, (-1, self.num_features, self.num_features))
+        xxt = ops.tensordot(x, x, axes=(2, 2))
+        xxt = ops.reshape(xxt, (-1, self.num_features, self.num_features))
+        return ops.sum(self.l2reg * ops.square(xxt - self.eye))
+
 
 def dense_bn(x, filters):
     x = layers.Dense(filters)(x)
